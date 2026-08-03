@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Atomaire Simulatie/Atomaire Simulatie.vcxproj" />
+  <Project Path="Atomaire Simulatie/Atomaire Simulatie.vcxproj" Id="f8e58f01-fc27-4d97-b920-2c7c5a510ba7" />
 </Solution>
