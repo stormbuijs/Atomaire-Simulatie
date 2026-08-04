@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "Engine/Engine.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -24,7 +24,7 @@ void Engine::Start()
 		}
 
 
-		// Toon een zwart scherm
+		// Laat voor nu een zwart scherm zien
 		window.clear(sf::Color::Black);
 
 		window.display();

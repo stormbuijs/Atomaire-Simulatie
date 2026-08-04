@@ -19,6 +19,12 @@
     <Filter Include="Rendering">
       <UniqueIdentifier>{f46e4329-f2bf-486b-8e7e-1ffd098b3fe3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{9c9c24c2-b799-45a2-90e4-85460225406f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{297ce65b-104e-4324-bf8c-189d979102a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Engine.cpp">
@@ -30,6 +36,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Math\Vector2.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Particle.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Engine.h">
@@ -37,6 +49,15 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\Renderer.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Particle.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Real.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
