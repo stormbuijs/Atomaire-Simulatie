@@ -1,6 +1,12 @@
 #include "Engine/Engine.h"
 
+#include <vector>
+
 #include <SFML/Graphics.hpp>
+
+#include "Math/Vector2.h"
+#include "Physics/Particle.h"
+#include "Rendering/Renderer.h"
 
 
 void Engine::Start()
@@ -10,6 +16,14 @@ void Engine::Start()
 		sf::VideoMode({ 1280, 720 }),
 		"Atomaire Simulatie"
 	);
+
+
+	Renderer renderer;
+
+
+	// Een testdeeltje
+	std::vector<Particle> particles;
+	particles.push_back(Particle(Vector2(640.0, 360.0), 1.0, 20.0));
 
 
 	while (window.isOpen())
@@ -24,9 +38,10 @@ void Engine::Start()
 		}
 
 
-		// Laat voor nu een zwart scherm zien
-		window.clear(sf::Color::Black);
+		renderer.Update(particles);
 
+		window.clear(sf::Color::Black);
+		renderer.Draw(window);
 		window.display();
 	}
 }
