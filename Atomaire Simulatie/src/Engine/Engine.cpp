@@ -6,12 +6,13 @@
 
 #include "Math/Vector2.h"
 #include "Physics/Particle.h"
+#include "Physics/Simulation.h"
 #include "Rendering/Renderer.h"
 
 
 void Engine::Start()
 {
-	// Maak een nieuw venster aan met een vaste resolutie
+	// Maak een nieuw venster aan
 	sf::RenderWindow window(
 		sf::VideoMode({ 1280, 720 }),
 		"Atomaire Simulatie"
@@ -20,10 +21,15 @@ void Engine::Start()
 
 	Renderer renderer;
 
+	Simulation simulation(1280.0, 720.0);
+
 
 	// Een testdeeltje
-	std::vector<Particle> particles;
-	particles.push_back(Particle(Vector2(640.0, 360.0), 1.0, 20.0));
+	Particle testParticle(Vector2(640.0, 360.0), 1.0, 20.0);
+	testParticle.SetVelocity(Vector2(450.0, 290.0));
+	simulation.AddParticle(testParticle);
+
+	sf::Clock clock;
 
 
 	while (window.isOpen())
@@ -38,7 +44,12 @@ void Engine::Start()
 		}
 
 
-		renderer.Update(particles);
+		// Bereken hoeveel tijd er sinds de vorige frame is verstreken
+		// en voer één stap uit van de simulaite
+		Real deltaTime = clock.restart().asSeconds();
+		simulation.Step(deltaTime);
+
+		renderer.Update(simulation.GetParticles());
 
 		window.clear(sf::Color::Black);
 		renderer.Draw(window);

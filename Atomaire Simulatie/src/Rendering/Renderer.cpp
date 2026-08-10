@@ -34,14 +34,19 @@ void Renderer::Update(const std::vector<Particle>& particles)
 
 	for (size_t index = 0; index < particles.size(); ++index)
 	{
-		Real radius = particles[index].GetRadius();
-		Vector2 position = particles[index].GetPosition();
+		Real particleRadius = particles[index].GetRadius();
+		Vector2 particlePosition = particles[index].GetPosition();
 
 
-		sf::Vector2f topLeft(position.x - radius, position.y - radius);
-		sf::Vector2f topRight(position.x + radius, position.y - radius);
-		sf::Vector2f bottomRight(position.x + radius, position.y + radius);
-		sf::Vector2f bottomLeft(position.x - radius, position.y + radius);
+		float x = static_cast<float>(particlePosition.x);
+		float y = static_cast<float>(particlePosition.y);
+		float radius = static_cast<float>(particleRadius);
+
+
+		sf::Vector2f topLeft(x - radius, y - radius);
+		sf::Vector2f topRight(x + radius, y - radius);
+		sf::Vector2f bottomRight(x + radius, y + radius);
+		sf::Vector2f bottomLeft(x - radius, y + radius);
 
 		sf::Vector2f uvTopLeft(0.0f, 0.0f);
 		sf::Vector2f uvTopRight(textureSize, 0.0f);

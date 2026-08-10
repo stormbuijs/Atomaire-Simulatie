@@ -22,7 +22,9 @@ public:
 	Real GetMass() const;
 	Real GetRadius() const;
 
+	void SetPosition(const Vector2& position);
 	void SetVelocity(const Vector2& velocity);
+	void Integrate(Real deltaTime);
 
 private:
 

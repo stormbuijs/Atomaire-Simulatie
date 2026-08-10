@@ -32,7 +32,17 @@ Real Particle::GetRadius() const
 }
 
 
+void Particle::SetPosition(const Vector2& position)
+{
+	this->position = position;
+}
+
 void Particle::SetVelocity(const Vector2& velocity)
 {
 	this->velocity = velocity;
+}
+
+void Particle::Integrate(Real deltaTime)
+{
+	position += velocity * deltaTime;
 }
