@@ -25,7 +25,7 @@ void Renderer::GenerateCircleTexture(unsigned int diameter)
 void Renderer::Update(const std::vector<Particle>& particles)
 {
 	// De array verandert automatisch mee
-	// 2 driehoeken zijn 6 vertices per particle
+	// 2 driehoeken zijn 6 vertices per deeltje
 	vertices.resize(particles.size() * 6);
 
 

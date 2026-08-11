@@ -1,37 +1,55 @@
 #include "Engine/Engine.h"
 
 #include <vector>
-
-#include <SFML/Graphics.hpp>
+#include <random>
 
 #include "Math/Vector2.h"
 #include "Physics/Particle.h"
-#include "Physics/Simulation.h"
-#include "Rendering/Renderer.h"
+
+
+Engine::Engine(): simulation(1280.0, 720.0)
+{
+}
 
 
 void Engine::Start()
 {
 	// Maak een nieuw venster aan
-	sf::RenderWindow window(
+	window.create(
 		sf::VideoMode({ 1280, 720 }),
 		"Atomaire Simulatie"
 	);
 
 
-	Renderer renderer;
-
-	Simulation simulation(1280.0, 720.0);
+	simulation = Simulation(1280.0, 720.0);
 
 
-	// Een testdeeltje
-	Particle testParticle(Vector2(640.0, 360.0), 1.0, 20.0);
-	testParticle.SetVelocity(Vector2(450.0, 290.0));
-	simulation.AddParticle(testParticle);
+	// Testdeeltjes
+	std::mt19937 rng(std::random_device{}());
+	std::uniform_real_distribution<Real> posX(0.0, 1280.0);
+	std::uniform_real_distribution<Real> posY(0.0, 720.0);
+	std::uniform_real_distribution<Real> vel(-100.0, 100.0);
 
-	sf::Clock clock;
+	Particle nucleus(Vector2(640.0, 360.0), 1000.0, 20.0, 1.0);
+	simulation.AddParticle(nucleus);
+
+	const int electronCount = 12;
+
+	for (int i = 0; i < electronCount; ++i)
+	{
+		Particle electron(Vector2(posX(rng), posY(rng)), 1.0, 5.0, -1.0);
+		electron.SetVelocity(Vector2(vel(rng), vel(rng)));
+
+		simulation.AddParticle(electron);
+	}
 
 
+	Run();
+}
+
+
+void Engine::Run()
+{
 	while (window.isOpen())
 	{
 		// Controleer op het sluiten van het venster

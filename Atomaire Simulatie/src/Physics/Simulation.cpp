@@ -15,11 +15,27 @@ void Simulation::Step(Real deltaTime)
 {
 	Real scaledDeltaTime = deltaTime * timeScale;
 
+
+	// Voor elk paar deeltjes, verdeel de Coulomb-kracht
+	for (size_t i = 0; i < particles.size(); ++i)
+	{
+		for (size_t j = i + 1; j < particles.size(); ++j)
+		{
+			Vector2 force = CalculateCoulombForce(particles[i], particles[j]);
+
+			// Newtons derde wet: actie = -reactie
+			particles[i].ApplyForce(force);
+			particles[j].ApplyForce(force * -1.0);
+		}
+	}
+
+	
 	for (Particle& particle : particles)
 	{
 		particle.Integrate(scaledDeltaTime);
 		ResolveBoundaryCollisions(particle);
 	}
+
 
 	// TODO: particle-particle botsingen
 }
@@ -61,6 +77,36 @@ void Simulation::ResolveBoundaryCollisions(Particle& particle) const
 
 	particle.SetPosition(position);
 	particle.SetVelocity(velocity);
+}
+
+
+Vector2 Simulation::CalculateCoulombForce(const Particle& a, const Particle& b) const
+{
+	Vector2 direction = b.GetPosition() - a.GetPosition();
+	Real actualDistance = direction.Length();
+
+
+	// Voorkom deling door nul als deeltjes precies overlappen
+	if (actualDistance < 0.0001)
+	{
+		return Vector2(0.0, 0.0);
+	}
+
+
+	Vector2 unitDirection = direction / actualDistance;
+
+
+	// Voorkom oneindig grote krachten wanneer deeltjes overlappen
+	// Gebruik nooit een kleinere afstand dan de som van hun radii
+	Real minimumDistance = a.GetRadius() + b.GetRadius();
+	Real distance = (actualDistance < minimumDistance) ? minimumDistance : actualDistance;
+
+
+	Real forceMagnitude = coulombConstant * a.GetCharge() * b.GetCharge() / (distance * distance);
+
+
+	// Gelijke ladingen duwen weg van elkaar, dus de kracht op 'a' wijst dan tegen de unitDirection in
+	return unitDirection * -forceMagnitude;
 }
 
 

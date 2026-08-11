@@ -24,11 +24,17 @@ private:
 
 	void ResolveBoundaryCollisions(Particle& particle) const;
 
+
 	std::vector<Particle> particles;
 
 	Real width;
 	Real height;
 
 	Real timeScale = 1.0;
+
+
+	Vector2 CalculateCoulombForce(const Particle& a, const Particle& b) const;
+
+	Real coulombConstant = 1500000.0;
 
 };

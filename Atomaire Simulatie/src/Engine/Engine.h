@@ -1,15 +1,26 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+
+#include "Physics/Simulation.h"
+#include "Rendering/Renderer.h"
+
+
 class Engine
 {
 public:
 
-	// Start de simulatie-engine
+	Engine();
+
 	void Start();
 
 private:
 
-	// Start de hoofdloop van het programma
 	void Run();
+
+	sf::RenderWindow window;
+	Renderer renderer;
+	Simulation simulation;
+	sf::Clock clock;
 
 };
