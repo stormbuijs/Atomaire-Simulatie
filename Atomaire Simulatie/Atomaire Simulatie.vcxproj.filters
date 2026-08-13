@@ -45,6 +45,9 @@
     <ClCompile Include="src\Physics\Simulation.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physics\Element.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Engine.h">
@@ -63,6 +66,12 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\Simulation.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Element.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\SimulationConfiguration.h">
       <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>

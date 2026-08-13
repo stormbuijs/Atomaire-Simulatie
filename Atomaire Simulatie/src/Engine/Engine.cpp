@@ -24,25 +24,24 @@ void Engine::Start()
 	simulation = Simulation(1280.0, 720.0);
 
 
-	// Testdeeltjes
-	std::mt19937 rng(std::random_device{}());
-	std::uniform_real_distribution<Real> posX(0.0, 1280.0);
-	std::uniform_real_distribution<Real> posY(0.0, 720.0);
-	std::uniform_real_distribution<Real> vel(-100.0, 100.0);
+	// Testmolecuul
+	Simulation::Atom oxygen = simulation.CreateAtom(
+		ElementType::Oxygen, Vector2(640.0, 360.0)
+	);
 
-	Particle nucleus(Vector2(640.0, 360.0), 1000.0, 20.0, 1.0);
-	simulation.AddParticle(nucleus);
+	Simulation::Atom hydrogen1 = simulation.CreateAtom(
+		ElementType::Hydrogen, Vector2(600.0, 320.0)
+	);
 
-	const int electronCount = 12;
+	Simulation::Atom hydrogen2 = simulation.CreateAtom(
+		ElementType::Hydrogen, Vector2(680.0, 320.0)
+	);
 
-	for (int i = 0; i < electronCount; ++i)
-	{
-		Particle electron(Vector2(posX(rng), posY(rng)), 1.0, 5.0, -1.0);
-		electron.SetVelocity(Vector2(vel(rng), vel(rng)));
+	simulation.BondAtoms(oxygen, hydrogen1);
+	simulation.BondAtoms(oxygen, hydrogen2);
 
-		simulation.AddParticle(electron);
-	}
 
+	simulation.PreSolveBondConstraints();
 
 	Run();
 }
