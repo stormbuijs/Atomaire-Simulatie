@@ -9,12 +9,16 @@ struct SimulationConfiguration
 	int substepCount = 8;
 
 	// Position-Based Dynamics
-	int constraintIterations = 4;
+	int constraintIterations = 5;
 	Real bondLength = 20.0;
 
 	// Coulomb-kracht
-	Real coulombConstant = 20.0;
+	Real coulombConstant = 1000.0;
 	Real coulombSoftening = 5.0;
+
+	// Pauliprincipe
+	Real pauliRepulsionStrength = 50000.0;
+	Real pauliRepulsionRadius = 12.0;
 
 	// Deeltjes-eigenschappen
 	Real nucleusRadius = 12.0;

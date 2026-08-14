@@ -5,7 +5,7 @@ ElementData GetElementData(ElementType type)
 {
 	switch (type)
 	{
-
+	
 	case ElementType::Hydrogen:
 		return {
 			.mass = 1.0,
@@ -18,6 +18,13 @@ ElementData GetElementData(ElementType type)
 			.mass = 16.0,
 			.lonePairCount = 2,
 			.bondCapacity = 2
+		};
+
+	case ElementType::Carbon:
+		return {
+			.mass = 12.0,
+			.lonePairCount = 0,
+			.bondCapacity = 4
 		};
 
 	}

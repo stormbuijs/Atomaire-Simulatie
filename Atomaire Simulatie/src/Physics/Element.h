@@ -6,7 +6,8 @@
 enum class ElementType
 {
 	Hydrogen,
-	Oxygen
+	Oxygen,
+	Carbon
 };
 
 

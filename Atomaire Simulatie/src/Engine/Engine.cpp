@@ -25,20 +25,18 @@ void Engine::Start()
 
 
 	// Testmolecuul
-	Simulation::Atom oxygen = simulation.CreateAtom(
-		ElementType::Oxygen, Vector2(640.0, 360.0)
-	);
+	Simulation::Atom carbon = simulation.CreateAtom(ElementType::Carbon, Vector2(640.0, 360.0));
 
-	Simulation::Atom hydrogen1 = simulation.CreateAtom(
-		ElementType::Hydrogen, Vector2(600.0, 320.0)
-	);
+	Simulation::Atom hydrogenA = simulation.CreateAtom(ElementType::Hydrogen, Vector2(600.0, 320.0));
+	Simulation::Atom hydrogenB = simulation.CreateAtom(ElementType::Hydrogen, Vector2(660.0, 310.0));
+	Simulation::Atom hydrogenC = simulation.CreateAtom(ElementType::Hydrogen, Vector2(600.0, 400.0));
+	Simulation::Atom hydrogenD = simulation.CreateAtom(ElementType::Hydrogen, Vector2(660.0, 410.0));
 
-	Simulation::Atom hydrogen2 = simulation.CreateAtom(
-		ElementType::Hydrogen, Vector2(680.0, 320.0)
-	);
-
-	simulation.BondAtoms(oxygen, hydrogen1);
-	simulation.BondAtoms(oxygen, hydrogen2);
+	simulation.BondAtoms(carbon, hydrogenA);
+	simulation.BondAtoms(carbon, hydrogenB);
+	simulation.BondAtoms(carbon, hydrogenC);
+	simulation.BondAtoms(carbon, hydrogenD);
+	// Testmolecuul
 
 
 	simulation.PreSolveBondConstraints();
@@ -62,7 +60,7 @@ void Engine::Run()
 
 
 		// Bereken hoeveel tijd er sinds de vorige frame is verstreken
-		// en voer één stap uit van de simulaite
+		// en voer één stap uit van de simulatie
 		Real deltaTime = clock.restart().asSeconds();
 		simulation.Step(deltaTime);
 

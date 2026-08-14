@@ -11,6 +11,7 @@ Simulation::Simulation(Real width, Real height, const SimulationConfiguration& c
 
 size_t Simulation::AddParticle(const Particle& particle)
 {
+	// Voeg een nieuw deeltje toe aan de simulatie en geef de index
 	particles.push_back(particle);
 	return particles.size() - 1;
 }
@@ -65,15 +66,21 @@ void Simulation::Step(Real deltaTime)
 	for (int step = 0; step < substepCount; ++step)
 	{
 		// Voor alle deeltjes-paren, verdeel de Coulomb-kracht
-		for (size_t i = 0; i < particles.size(); ++i)
+		for (size_t indexA = 0; indexA < particles.size(); ++indexA)
 		{
-			for (size_t j = i + 1; j < particles.size(); ++j)
+			for (size_t indexB = indexA + 1; indexB < particles.size(); ++indexB)
 			{
-				Vector2 force = CalculateCoulombForce(particles[i], particles[j]);
+				Vector2 coulombForce = CalculateCoulombForce(particles[indexA], particles[indexB]);
 
 				// Newtons derde wet: actie = -reactie
-				particles[i].ApplyForce(force);
-				particles[j].ApplyForce(force * -1.0);
+				particles[indexA].ApplyForce(coulombForce);
+				particles[indexB].ApplyForce(coulombForce * -1.0);
+
+
+				Vector2 repulsionForce = CalculatePauliRepulsionForce(particles[indexA], particles[indexB]);
+
+				particles[indexA].ApplyForce(repulsionForce);
+				particles[indexB].ApplyForce(repulsionForce * -1.0);
 			}
 		}
 
@@ -241,6 +248,27 @@ Vector2 Simulation::CalculateCoulombForce(const Particle& a, const Particle& b) 
 
 	// Gelijke ladingen duwen weg van elkaar, dus de kracht op 'a' wijst dan tegen de unitDirection in
 	return unitDirection * -forceMagnitude;
+}
+
+Vector2 Simulation::CalculatePauliRepulsionForce(const Particle& a, const Particle& b) const
+{
+	Vector2 direction = b.GetPosition() - a.GetPosition();
+	Real distance = direction.Length();
+
+
+	if (distance < configuration.minimumDistance)
+	{
+		return Vector2(0.0, 0.0);
+	}
+
+
+	Vector2 unitDirection = direction / distance;
+
+	// Ongeacht de lading altijd afstonend: benadering van de Pauli-afstoting tussen elektronenwolken
+	Real ratio = configuration.pauliRepulsionRadius / distance;
+	Real repulsionMagnitude = configuration.pauliRepulsionStrength * std::pow(ratio, 12.0);
+
+	return unitDirection * -repulsionMagnitude;
 }
 
 

@@ -24,8 +24,8 @@ public:
 
 	struct Atom
 	{
-		ElementType type;
-		size_t nucleusIndex;
+		ElementType type = ElementType::Hydrogen;
+		size_t nucleusIndex = 0;
 		std::vector<size_t> lonePairIndices;
 	};
 
@@ -62,6 +62,8 @@ private:
 
 
 	Vector2 CalculateCoulombForce(const Particle& a, const Particle& b) const;
+
+	Vector2 CalculatePauliRepulsionForce(const Particle& a, const Particle& b) const;
 
 
 	void ApplyBondContraints(const int iterations);
