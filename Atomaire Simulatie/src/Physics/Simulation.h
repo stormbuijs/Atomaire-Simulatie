@@ -66,9 +66,9 @@ private:
 	Vector2 CalculatePauliRepulsionForce(const Particle& a, const Particle& b) const;
 
 
+	void ApplyPairwiseForces();
 	void ApplyBondContraints(const int iterations);
 
-	void SatisfyBondConstraints(Real deltaTime, const std::vector<Vector2>& positionsBeforeStep);
 
 	std::vector<Bond> bonds;
 

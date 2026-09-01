@@ -58,7 +58,6 @@ void Engine::Run()
 			}
 		}
 
-
 		// Bereken hoeveel tijd er sinds de vorige frame is verstreken
 		// en voer één stap uit van de simulatie
 		Real deltaTime = clock.restart().asSeconds();

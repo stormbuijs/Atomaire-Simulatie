@@ -58,34 +58,18 @@ void Simulation::Step(Real deltaTime)
 {
 	Real scaledDeltaTime = deltaTime * timeScale;
 
-
 	// Verdeel een grote Δt in kleinere simulatiestappen
 	const int substepCount = configuration.substepCount;
 	Real substepDeltaTime = scaledDeltaTime / static_cast<Real>(substepCount);
+	Real halfSubstepDeltaTime = substepDeltaTime * 0.5;
 
 	for (int step = 0; step < substepCount; ++step)
 	{
-		// Voor alle deeltjes-paren, verdeel de Coulomb-kracht
-		for (size_t indexA = 0; indexA < particles.size(); ++indexA)
-		{
-			for (size_t indexB = indexA + 1; indexB < particles.size(); ++indexB)
-			{
-				Vector2 coulombForce = CalculateCoulombForce(particles[indexA], particles[indexB]);
-
-				// Newtons derde wet: actie = -reactie
-				particles[indexA].ApplyForce(coulombForce);
-				particles[indexB].ApplyForce(coulombForce * -1.0);
+		// De eerste halve kick met a(t), dan drift
+		ApplyPairwiseForces();
 
 
-				Vector2 repulsionForce = CalculatePauliRepulsionForce(particles[indexA], particles[indexB]);
-
-				particles[indexA].ApplyForce(repulsionForce);
-				particles[indexB].ApplyForce(repulsionForce * -1.0);
-			}
-		}
-
-
-		// Onthoudt de posities vóór de correctie om straks de snelheid ervan af te leiden
+		// Onthoud de huidge positie van de deeltjes
 		std::vector<Vector2> positionsBeforeStep;
 		positionsBeforeStep.reserve(particles.size());
 
@@ -93,13 +77,53 @@ void Simulation::Step(Real deltaTime)
 		{
 			positionsBeforeStep.push_back(particle.GetPosition());
 
-			// Integreer het deeltje en controleer of deze (voor nu) binnen het scherm blijft
-			particle.Integrate(substepDeltaTime);
+			particle.KickVelocity(halfSubstepDeltaTime);
+			particle.DriftPosition(substepDeltaTime);
+			
 			ResolveBoundaryCollisions(particle);
+
+			particle.ClearForce();
 		}
 
 
-		SatisfyBondConstraints(substepDeltaTime, positionsBeforeStep);
+		// Bindingen corrigeren op de nieuwe, gedreven positie
+		ApplyBondContraints(configuration.constraintIterations);
+
+
+		// Effectieve snelheid afleiden uit de werkelijke verplaatsing
+		// Vangt drift en PBD-correctie in één keer op
+		for (size_t index = 0; index < particles.size(); ++index)
+		{
+			Vector2 actualDisplacement = particles[index].GetPosition() - positionsBeforeStep[index];
+			particles[index].SetVelocity(actualDisplacement / substepDeltaTime);
+		}
+
+
+		// Tweede halve kick met a(t+Δt), berekend op de gecorrigeerde positie
+		ApplyPairwiseForces();
+
+		for (Particle& particle : particles)
+		{
+			particle.KickVelocity(halfSubstepDeltaTime);
+			particle.ClearForce();
+		}
+	}
+}
+
+void Simulation::ApplyPairwiseForces()
+{
+	for (size_t indexA = 0; indexA < particles.size(); ++indexA)
+	{
+		for (size_t indexB = indexA + 1; indexB < particles.size(); ++indexB)
+		{
+			Vector2 coulombForce = CalculateCoulombForce(particles[indexA], particles[indexB]);
+			particles[indexA].ApplyForce(coulombForce);
+			particles[indexB].ApplyForce(coulombForce * -1.0);
+
+			Vector2 repulsionForce = CalculatePauliRepulsionForce(particles[indexA], particles[indexB]);
+			particles[indexA].ApplyForce(repulsionForce);
+			particles[indexB].ApplyForce(repulsionForce * -1.0);
+		}
 	}
 }
 
@@ -197,19 +221,6 @@ void Simulation::ApplyBondContraints(const int iterations)
 			a.SetPosition(a.GetPosition() + correction * weightA);
 			b.SetPosition(b.GetPosition() - correction * weightB);
 		}
-	}
-}
-
-void Simulation::SatisfyBondConstraints(Real deltaTime, const std::vector<Vector2>& positionsBeforeStep)
-{
-	ApplyBondContraints(configuration.constraintIterations);
-
-
-	// Pas de snelheid aan op wat er daadwerkelijk is gebeurd
-	for (size_t index = 0; index < particles.size(); ++index)
-	{
-		Vector2 actualDisplacement = particles[index].GetPosition() - positionsBeforeStep[index];
-		particles[index].SetVelocity(actualDisplacement / deltaTime);
 	}
 }
 

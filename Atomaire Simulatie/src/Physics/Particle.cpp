@@ -55,14 +55,18 @@ void Particle::ApplyForce(const Vector2& force)
 }
 
 
-void Particle::Integrate(Real deltaTime)
+void Particle::KickVelocity(Real deltaTime)
 {
 	Vector2 acceleration = accumulatedForce / mass;
-
-	// Semi-implicit Euler aanpak: eerst snelheid dan positie
 	velocity += acceleration * deltaTime;
+}
+
+void Particle::DriftPosition(Real deltaTime)
+{
 	position += velocity * deltaTime;
+}
 
-
+void Particle::ClearForce()
+{
 	accumulatedForce = Vector2(0.0, 0.0);
 }

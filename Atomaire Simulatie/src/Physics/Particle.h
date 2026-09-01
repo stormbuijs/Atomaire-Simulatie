@@ -28,7 +28,9 @@ public:
 	void SetVelocity(const Vector2& velocity);
 	void ApplyForce(const Vector2& force);
 
-	void Integrate(Real deltaTime);
+	void KickVelocity(Real deltaTime);
+	void DriftPosition(Real deltaTime);
+	void ClearForce();
 
 private:
 

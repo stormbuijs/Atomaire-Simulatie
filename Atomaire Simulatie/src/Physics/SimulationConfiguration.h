@@ -13,11 +13,11 @@ struct SimulationConfiguration
 	Real bondLength = 20.0;
 
 	// Coulomb-kracht
-	Real coulombConstant = 1000.0;
+	Real coulombConstant = 10000.0;
 	Real coulombSoftening = 5.0;
 
 	// Pauliprincipe
-	Real pauliRepulsionStrength = 50000.0;
+	Real pauliRepulsionStrength = 500000.0;
 	Real pauliRepulsionRadius = 12.0;
 
 	// Deeltjes-eigenschappen
